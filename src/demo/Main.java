@@ -21,6 +21,7 @@ public class Main {
 //        System.out.println("result = " + result);
 //        System.out.println(finish-start);
         int nThreads = 100;
+        finished = 0; // это должно быть здесь, а не как на видео...
         totalResult = 0;
         // 0 (0,Pi/10)
         // (Pi/10, 2*Pi/10)
@@ -35,7 +36,8 @@ public class Main {
             ThreadedCalculator calculator = new ThreadedCalculator(this, ai, bi, ni, this::f);
             new Thread(calculator).start();
         }
-        finished = 0;
+        // finished = 0; - на видео так, но это ошибка. У всех бывает :-(
+        // если шагов будет мало, один (или несколько) потоков успеют закончиться до этого присваивания.
         try {
             synchronized (this) {
                 while (finished < nThreads) {
