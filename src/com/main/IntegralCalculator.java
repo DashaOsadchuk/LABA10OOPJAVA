@@ -1,4 +1,4 @@
-package demo;
+package com.main;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -17,11 +17,16 @@ public class IntegralCalculator {
 
     public double calculate() {
         double h = (b-a)/n;
-        double sum = 0;
-        for (int i = 0; i < n; i++) {
-            double x = a + i * h;
-            sum += f.applyAsDouble(x)*h;
+        double sum = 0.5*f.applyAsDouble(a)+0.5*f.applyAsDouble(a+n*h);
+        for (int i = 1; i < n-1; i++) {
+            double x = a+i*h;
+            sum+=f.applyAsDouble(x);
         }
-        return sum ;
+        for (int i = 1; i < n; i++) {
+            double x = a + i * h;
+            double x_ = a+(i-1)*h;
+            sum += (f.applyAsDouble(x_)+f.applyAsDouble(x));
+        }
+        return sum*h/3;
     }
 }

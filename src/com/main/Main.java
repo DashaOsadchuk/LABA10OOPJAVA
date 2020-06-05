@@ -1,4 +1,4 @@
-package demo;
+package com.main;
 
 public class Main {
 
@@ -10,23 +10,12 @@ public class Main {
     }
 
     private void run() {
-        double a = 0.0;
-        double b = Math.PI;
-        // Math.sin(x)
+        double a = 1.0;
+        double b = 2.0;
         int n = 100_000_000;
-//        IntegralCalculator calculator = new IntegralCalculator(a, b, n, this::f);
-//        long start = System.currentTimeMillis();
-//        double result = calculator.calculate();
-//        long finish = System.currentTimeMillis();
-//        System.out.println("result = " + result);
-//        System.out.println(finish-start);
         int nThreads = 100;
-        finished = 0; // это должно быть здесь, а не как на видео...
+        finished = 0;
         totalResult = 0;
-        // 0 (0,Pi/10)
-        // (Pi/10, 2*Pi/10)
-        // (2*Pi/10, 3*Pi/10)
-        // ...
         long start = System.currentTimeMillis();
         double delta = (b-a)/nThreads;
         int ni = n / nThreads;
@@ -36,8 +25,6 @@ public class Main {
             ThreadedCalculator calculator = new ThreadedCalculator(this, ai, bi, ni, this::f);
             new Thread(calculator).start();
         }
-        // finished = 0; - на видео так, но это ошибка. У всех бывает :-(
-        // если шагов будет мало, один (или несколько) потоков успеют закончиться до этого присваивания.
         try {
             synchronized (this) {
                 while (finished < nThreads) {
@@ -48,12 +35,12 @@ public class Main {
             e.printStackTrace();
         }
         long finish = System.currentTimeMillis();
-        System.out.println("totalResult = " + totalResult);
+        System.out.println("Итог = " + totalResult);
         System.out.println(finish-start);
     }
 
     public double f(double x) {
-        return Math.sin(x);
+        return (Math.pow (Math.E,x)-1)/(Math.pow (Math.E,x)+1);
     }
 
     public synchronized void sendResult(double res) {
